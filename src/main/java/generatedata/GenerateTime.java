@@ -7,11 +7,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Random;
-import entity.Entity;
 import entity.Source;
 import entity.Time;
 
-public class GenerateTime implements IGenerateData {
+public class GenerateTime implements IGenerateData<Time> {
 	
 	private static ArrayList<String> listDescription = new ArrayList<String>();
 	private static ArrayList<Source> listSource = new ArrayList<Source>();
@@ -24,10 +23,12 @@ public class GenerateTime implements IGenerateData {
 				
 			String vs;	
 			while((vs = inputStream.readLine()) != null && !vs.equals("-1")){
+				vs = vs.trim();
 				listDescription.add(vs);
 			}
 			
 			while((vs = inputStream.readLine()) != null && !vs.equals("-2")){
+				vs = vs.trim();
 				Source temp = new Source(vs);
 				listSource.add(temp);
 			}
@@ -38,7 +39,7 @@ public class GenerateTime implements IGenerateData {
 		}
 	}
 
-	public Entity generateData(int idNumber) {
+	public Time generateData(int idNumber) {
 		Random rand = new Random();	
 		
 		GregorianCalendar gc = new GregorianCalendar();      

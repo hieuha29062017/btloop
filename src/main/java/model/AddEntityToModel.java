@@ -1,4 +1,4 @@
-package graphdbconnection;
+package model;
 
 import org.eclipse.rdf4j.model.BNode;
 import org.eclipse.rdf4j.model.IRI;
@@ -16,11 +16,20 @@ import entity.Time;
 import relation.RelationOfEntity;
 
 public class AddEntityToModel {
-	public static SpecialType addEntityToModel(Person per) throws IllegalArgumentException, 
-				   UnsupportedOperationException  {
+	
+	private Model model;
+	
+	public AddEntityToModel() {
+		model = new TreeModel();
+	}
+	
+	public Model getModel(){
+		return model;
+	}
+
+	public IRI addEntityToModel(Person per) throws IllegalArgumentException{
 		
 		ValueFactory vf = SimpleValueFactory.getInstance();
-		Model model = new TreeModel();
 		String nameSpace = "http://EntityPerson.oop/";
 		
 		IRI subject = vf.createIRI(nameSpace, per.getID());
@@ -33,17 +42,13 @@ public class AddEntityToModel {
 		model.add(subject, RelationOfEntity.HAS_SOURCE, source);
 		model.add(source, RelationOfEntity.HAS_LINK, vf.createLiteral(per.getSource().getLink()));
 		model.add(source, RelationOfEntity.TIME, vf.createLiteral(per.getSource().getDate()));
-		
-		SpecialType special = new SpecialType(model, subject);
 				
-		return special;
+		return subject;
 	}
 	
-	public static SpecialType addEntityToModel(Location lct) throws IllegalArgumentException,
-				   UnsupportedOperationException{
+	public IRI addEntityToModel(Location lct) throws IllegalArgumentException{
 		
 		ValueFactory vf = SimpleValueFactory.getInstance();
-		Model model = new TreeModel();
 		String nameSpace = "http://EntityLocation.oop/";
 		
 		IRI subject = vf.createIRI(nameSpace, lct.getID());
@@ -56,15 +61,12 @@ public class AddEntityToModel {
 		model.add(source, RelationOfEntity.HAS_LINK, vf.createLiteral(lct.getSource().getLink()));
 		model.add(source, RelationOfEntity.TIME, vf.createLiteral(lct.getSource().getDate()));
 		
-		SpecialType special = new SpecialType(model, subject);
-		
-		return special;
+		return subject;
 	}
 	
-	public static SpecialType addEntityToModel(Organization org) throws IllegalArgumentException,
-				   UnsupportedOperationException{
+	public IRI addEntityToModel(Organization org) throws IllegalArgumentException{
+		
 		ValueFactory vf = SimpleValueFactory.getInstance();
-		Model model = new TreeModel();
 		String nameSpace = "http://EntityOrganization.oop/";
 		
 		IRI subject = vf.createIRI(nameSpace, org.getID());
@@ -77,15 +79,12 @@ public class AddEntityToModel {
 		model.add(source, RelationOfEntity.HAS_LINK, vf.createLiteral(org.getSource().getLink()));
 		model.add(source, RelationOfEntity.TIME, vf.createLiteral(org.getSource().getDate()));
 		
-		SpecialType special = new SpecialType(model, subject);
-		
-		return special;
+		return subject;
 	}
 	
-	public static SpecialType addEntityToModel(Event evt) throws IllegalArgumentException,
-					UnsupportedOperationException {
+	public IRI addEntityToModel(Event evt) throws IllegalArgumentException{
+		
 		ValueFactory vf = SimpleValueFactory.getInstance();
-		Model model = new TreeModel();
 		String nameSpace = "http://EntityEvent.oop/";
 		
 		IRI subject = vf.createIRI(nameSpace, evt.getID());
@@ -98,15 +97,12 @@ public class AddEntityToModel {
 		model.add(source, RelationOfEntity.HAS_LINK, vf.createLiteral(evt.getSource().getLink()));
 		model.add(source, RelationOfEntity.TIME, vf.createLiteral(evt.getSource().getDate()));
 		
-		SpecialType special = new SpecialType(model, subject);
-		
-		return special;
+		return subject;
 	}
 	
-	public static SpecialType addEntityToModel(Country cty) throws IllegalArgumentException,
-	   				UnsupportedOperationException {
+	public IRI addEntityToModel(Country cty) throws IllegalArgumentException{
+		
 		ValueFactory vf = SimpleValueFactory.getInstance();
-		Model model = new TreeModel();
 		String nameSpace = "http://EntityCountry.oop/";
 		
 		IRI subject = vf.createIRI(nameSpace, cty.getID());
@@ -118,15 +114,12 @@ public class AddEntityToModel {
 		model.add(source, RelationOfEntity.HAS_LINK, vf.createLiteral(cty.getSource().getLink()));
 		model.add(source, RelationOfEntity.TIME, vf.createLiteral(cty.getSource().getDate()));
 		
-		SpecialType special = new SpecialType(model, subject);
-		
-		return special;
+		return subject;
 	}
 	
-	public static SpecialType addEntityToModel(Time time) throws IllegalArgumentException,
-					UnsupportedOperationException{
+	public IRI addEntityToModel(Time time) throws IllegalArgumentException{
+		
 		ValueFactory vf = SimpleValueFactory.getInstance();
-		Model model = new TreeModel();
 		String nameSpace = "http://EntityTime.oop/";
 		
 		IRI subject = vf.createIRI(nameSpace, time.getID());
@@ -138,8 +131,6 @@ public class AddEntityToModel {
 		model.add(source, RelationOfEntity.HAS_LINK, vf.createLiteral(time.getSource().getLink()));
 		model.add(source, RelationOfEntity.TIME, vf.createLiteral(time.getSource().getDate()));
 		
-		SpecialType special = new SpecialType(model, subject);
-		
-		return special;
+		return subject;
 	}
 }

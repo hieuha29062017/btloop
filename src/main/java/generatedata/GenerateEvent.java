@@ -7,12 +7,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Random;
-
-import entity.Entity;
 import entity.Event;
 import entity.Source;
 
-public class GenerateEvent implements IGenerateData {
+public class GenerateEvent implements IGenerateData<Event> {
 
 	private static ArrayList<String> listEventName = new ArrayList<String>();
 	private static ArrayList<String> listDescription = new ArrayList<String>();
@@ -26,14 +24,17 @@ public class GenerateEvent implements IGenerateData {
 				
 			String vs;
 			while((vs = inputStream.readLine()) != null && !vs.equals("-1")){
+				vs = vs.trim();
 				listEventName.add(vs);
 			}	
 			
 			while((vs = inputStream.readLine()) != null && !vs.equals("-2")){
+				vs = vs.trim();
 				listDescription.add(vs);
 			}	
 			
 			while((vs = inputStream.readLine()) != null && !vs.equals("-3")){
+				vs = vs.trim();
 				Source temp = new Source(vs);
 				listSource.add(temp);
 			}
@@ -45,7 +46,7 @@ public class GenerateEvent implements IGenerateData {
 	}
 	
 	@Override
-	public Entity generateData(int idNumber) {
+	public Event generateData(int idNumber) {
 		Random rand = new Random();				
 		
 		int pos = rand.nextInt(listEventName.size());

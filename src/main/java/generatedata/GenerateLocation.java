@@ -5,12 +5,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
-
-import entity.Entity;
 import entity.Location;
 import entity.Source;
 
-public class GenerateLocation implements IGenerateData {
+public class GenerateLocation implements IGenerateData<Location> {
 	
 	private static ArrayList<String> listNation = new ArrayList<String>();
 	private static ArrayList<String> listLocationName = new ArrayList<String>();
@@ -25,18 +23,22 @@ public class GenerateLocation implements IGenerateData {
 				
 			String vs;
 			while((vs = inputStream.readLine()) != null && !vs.equals("-1")){
+				vs = vs.trim();
 				listLocationName.add(vs);
 			}
 				
 			while((vs = inputStream.readLine()) != null && !vs.equals("-2")){
+				vs = vs.trim();
 				listDescription.add(vs);
 			}
 			
 			while((vs = inputStream.readLine()) != null && !vs.equals("-3")){
+				vs = vs.trim();
 				Source temp = new Source(vs);
 				listSource.add(temp);
 			}
 			while((vs = inputStream.readLine()) != null && !vs.equals("-4")){
+				vs = vs.trim();
 				listNation.add(vs);
 			}
 			
@@ -48,7 +50,7 @@ public class GenerateLocation implements IGenerateData {
 	}
 	
 	@Override
-	public Entity generateData(int idNumber) {
+	public Location generateData(int idNumber) {
 		Random rand = new Random();				
 		
 		int pos = rand.nextInt(listLocationName.size());

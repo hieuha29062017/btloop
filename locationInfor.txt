@@ -85,6 +85,15 @@ Bac Kinh
 Kiev
 London
 Lisbon
+Karachi
+Bang Lagos
+Kinshasa
+Sao Paulo
+Mexico City
+Mumbai
+Cairo
+Dhaka
+Delhi
 -1
 là một tỉnh thuộc vùng đông bắc Việt Nam
 là một tỉnh thuộc vùng đông bắc Việt Nam

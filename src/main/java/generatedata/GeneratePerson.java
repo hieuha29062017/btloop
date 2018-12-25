@@ -5,12 +5,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
-
-import entity.Entity;
 import entity.Person;
 import entity.Source;
 
-public class GeneratePerson implements IGenerateData {
+public class GeneratePerson implements IGenerateData <Person> {
 	
 	private static ArrayList<String> listPersonName = new ArrayList<String>();
 	private static ArrayList<String> listJobName = new ArrayList<String>();
@@ -25,17 +23,22 @@ public class GeneratePerson implements IGenerateData {
 			
 			String vs;
 			while((vs = inputStream.readLine()) != null && !vs.equals("-1")){
+				vs = vs.trim();
 				listPersonName.add(vs);
 			}
 			while((vs = inputStream.readLine()) != null && !vs.equals("-2")){
+				vs = vs.trim();
 				listDescription.add(vs);
 			}
 			while((vs = inputStream.readLine()) != null && !vs.equals("-3")){
+				vs = vs.trim();
 				Source temp = new Source(vs);
 				listSource.add(temp);
 			}
 			while((vs = inputStream.readLine()) != null && !vs.equals("-4")) {
-				listJobName.add(vs);			}
+				vs = vs.trim();
+				listJobName.add(vs);			
+			}
 		}
 		finally{
 			if(inputStream != null)
@@ -43,7 +46,7 @@ public class GeneratePerson implements IGenerateData {
 		}
 	}
 	
-	public Entity generateData(int idNumber) {
+	public Person generateData(int idNumber) {
 		Random rand = new Random();	
 
 		int pos = rand.nextInt(listPersonName.size());

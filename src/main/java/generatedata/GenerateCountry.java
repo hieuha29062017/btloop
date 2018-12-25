@@ -5,12 +5,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
-
 import entity.Country;
-import entity.Entity;
 import entity.Source;
 
-public class GenerateCountry implements IGenerateData {
+public class GenerateCountry implements IGenerateData<Country> {
 	
 	private static ArrayList<String> listCountryName = new ArrayList<String>();
 	private static ArrayList<String> listDescription = new ArrayList<String>();
@@ -23,14 +21,17 @@ public class GenerateCountry implements IGenerateData {
 				
 			String vs;
 			while((vs = inputStream.readLine()) != null && !vs.equals("-1")){
+				vs = vs.trim();
 				listCountryName.add(vs);
 			}
 				
 			while((vs = inputStream.readLine()) != null && !vs.equals("-2")){
+				vs = vs.trim();
 				listDescription.add(vs);
 			}
 			
 			while((vs = inputStream.readLine()) != null && !vs.equals("-3")){
+				vs = vs.trim();
 				Source temp = new Source(vs);
 				listSource.add(temp);
 			}
@@ -40,7 +41,7 @@ public class GenerateCountry implements IGenerateData {
 				inputStream.close();
 		}
 	}
-	public Entity generateData(int idNumber) {
+	public Country generateData(int idNumber) {
 		Random rand = new Random();				
 		
 		int pos = rand.nextInt(listCountryName.size());

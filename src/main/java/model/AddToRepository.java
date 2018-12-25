@@ -1,10 +1,11 @@
-package main;
+package model;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
 import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.RepositoryException;
 
@@ -20,7 +21,6 @@ import generatedata.GenerateLocation;
 import generatedata.GenerateOrganization;
 import generatedata.GeneratePerson;
 import generatedata.GenerateTime;
-import graphdbconnection.AddToRepo;
 import relation.CountryRelation;
 import relation.EventLocationRelation;
 import relation.EventTimeRelation;
@@ -33,7 +33,8 @@ import relation.PersonRelation;
 import relation.Relation;
 import relation.TimePersonRelation;
 
-public class Process {
+public class AddToRepository {
+	
 	private static ArrayList<IRI> ListPersonID;
 	private static ArrayList<IRI> ListLocationID;
 	private static ArrayList<IRI> ListOrganizationID;
@@ -47,7 +48,7 @@ public class Process {
 	private static GenerateTime time;
 	private static GenerateOrganization organization;
 	
-	public Process() throws IOException{
+	public AddToRepository() throws IOException{
 		ListCountryID = new ArrayList<IRI>();
 		ListEventID = new ArrayList<IRI>();
 		ListLocationID = new ArrayList<IRI>();
@@ -62,43 +63,42 @@ public class Process {
 		organization = new GenerateOrganization();
 	}
 	
-	public void pushEntity(int numberEntity, RepositoryConnection conn) throws IllegalArgumentException,
-					UnsupportedOperationException, RepositoryException {
-		
+	private Model createModelForEntity(int size) {
+		AddEntityToModel add = new AddEntityToModel();
 		Random rand = new Random();
-		System.out.println("Adding entities to repository.....");
-		for(int i=0; i< numberEntity; i++) {
+		
+		for(int i=0; i< size; i++) {
 			int type = rand.nextInt(6);
 			if(type == 0) {
-				Person per = (Person)person.generateData(i);
-				ListPersonID.add(AddToRepo.add(per, conn));
+				Person per = person.generateData(i);
+				ListPersonID.add(add.addEntityToModel(per));
 			}
 			else if(type == 1) {
-				Location lct = (Location)location.generateData(i);
-				ListLocationID.add(AddToRepo.add(lct, conn));   
+				Location lct = location.generateData(i);
+				ListLocationID.add(add.addEntityToModel(lct));   
 			}
 			else if(type == 2) {
-				Organization org = (Organization)organization.generateData(i);
-				ListOrganizationID.add(AddToRepo.add(org, conn));
+				Organization org = organization.generateData(i);
+				ListOrganizationID.add(add.addEntityToModel(org));
 			}
 			else if(type == 3) {
-				Country cty = (Country)country.generateData(i);
-				ListCountryID.add(AddToRepo.add(cty, conn));
+				Country cty = country.generateData(i);
+				ListCountryID.add(add.addEntityToModel(cty));
 			}
 			else if(type == 4){
-				Time tim = (Time)time.generateData(i);
-				ListTimeID.add(AddToRepo.add(tim, conn));
+				Time tim = time.generateData(i);
+				ListTimeID.add(add.addEntityToModel(tim));
 			}
 			else {
-				Event evt = (Event)event.generateData(i);
-				ListEventID.add(AddToRepo.add(evt, conn));
+				Event evt = event.generateData(i);
+				ListEventID.add(add.addEntityToModel(evt));
 			}
-		}	
-		System.out.println("Adding entities successful !");
+		}
+		return add.getModel();
 	}
 	
-	public void createRelation(int numberRelation, RepositoryConnection conn) throws IllegalArgumentException,
-				 RepositoryException{
+	private Model createModelForRelation(int numberRelation)throws IllegalArgumentException {
+		AddRelationToModel add = new AddRelationToModel();
 		
 		Random rand = new Random();
 		int sizeOfListCountry = ListCountryID.size();
@@ -108,7 +108,6 @@ public class Process {
 		int sizeOfListPerson = ListPersonID.size();
 		int sizeOfListTime = ListTimeID.size();
 		
-		System.out.println("Adding relations to repository.....");
 		for(int i=0; i<numberRelation; i++) {
 			int typeOfRelation = rand.nextInt(10);
 			if(typeOfRelation == 0) {
@@ -123,56 +122,56 @@ public class Process {
 				
 				IRI subj1 = ListCountryID.get(index1);
 				IRI subj2 = ListCountryID.get(index2);
-				conn.add(subj1, relation, subj2);
+				add.addRelationToModel(subj1, relation, subj2);
 			}
 			else if(typeOfRelation == 1) {
 				Relation rela = new EventLocationRelation();
 				IRI relation = rela.getRelation();
 				IRI subj1 = ListEventID.get(rand.nextInt(sizeOfListEvent));
 				IRI subj2 = ListLocationID.get(rand.nextInt(sizeOfListLocation));
-				conn.add(subj1, relation, subj2);
+				add.addRelationToModel(subj1, relation, subj2);
 			}
 			else if(typeOfRelation == 2) {
 				Relation rela = new EventTimeRelation();
 				IRI relation = rela.getRelation();
 				IRI subj1 = ListEventID.get(rand.nextInt(sizeOfListEvent));
 				IRI subj2 = ListTimeID.get(rand.nextInt(sizeOfListTime));
-				conn.add(subj1, relation, subj2);
+				add.addRelationToModel(subj1, relation, subj2);
 			}
 			else if(typeOfRelation == 3) {
 				Relation rela = new OrganizationEventRelation();
 				IRI relation = rela.getRelation();
 				IRI subj1 = ListOrganizationID.get(rand.nextInt(sizeOfListOrganization));
 				IRI subj2 = ListEventID.get(rand.nextInt(sizeOfListEvent));
-				conn.add(subj1, relation, subj2);
+				add.addRelationToModel(subj1, relation, subj2);
 			}
 			else if(typeOfRelation == 4) {
 				Relation rela = new OrganizationLocationRelation();
 				IRI relation = rela.getRelation();
 				IRI subj1 = ListOrganizationID.get(rand.nextInt(sizeOfListOrganization));
 				IRI subj2 = ListLocationID.get(rand.nextInt(sizeOfListLocation));
-				conn.add(subj1, relation, subj2);
+				add.addRelationToModel(subj1, relation, subj2);
 			}
 			else if(typeOfRelation == 5) {
 				Relation rela = new PersonCountryRelation();
 				IRI relation = rela.getRelation();
 				IRI subj1 = ListPersonID.get(rand.nextInt(sizeOfListPerson));
 				IRI subj2 = ListCountryID.get(rand.nextInt(sizeOfListCountry));
-				conn.add(subj1, relation, subj2);
+				add.addRelationToModel(subj1, relation, subj2);
 			}
 			else if(typeOfRelation == 6) {
 				Relation rela = new PersonEventRelation();
 				IRI relation = rela.getRelation();
 				IRI subj1 = ListPersonID.get(rand.nextInt(sizeOfListPerson));
 				IRI subj2 = ListEventID.get(rand.nextInt(sizeOfListEvent));
-				conn.add(subj1, relation, subj2);
+				add.addRelationToModel(subj1, relation, subj2);
 			}
 			else if(typeOfRelation == 7) {
 				Relation rela = new PersonOrganizationRelation();
 				IRI relation = rela.getRelation();
 				IRI subj1 = ListPersonID.get(rand.nextInt(sizeOfListPerson));
 				IRI subj2 = ListOrganizationID.get(rand.nextInt(sizeOfListOrganization));
-				conn.add(subj1, relation, subj2);
+				add.addRelationToModel(subj1, relation, subj2);
 			}
 			else if(typeOfRelation == 8) {
 				Relation rela = new PersonRelation();
@@ -186,16 +185,41 @@ public class Process {
 				
 				IRI subj1 = ListPersonID.get(index1);
 				IRI subj2 = ListPersonID.get(index2);
-				conn.add(subj1, relation, subj2);
+				add.addRelationToModel(subj1, relation, subj2);
 			}
 			else{
 				Relation rela = new TimePersonRelation();
 				IRI relation = rela.getRelation();
 				IRI subj1 = ListTimeID.get(rand.nextInt(sizeOfListTime));
 				IRI subj2 = ListPersonID.get(rand.nextInt(sizeOfListPerson));
-				conn.add(subj1, relation, subj2);
+				add.addRelationToModel(subj1, relation, subj2);
 			}	
 		}
-		System.out.println("Adding relations successful !");
+		
+		return add.getModel();
+	}
+	
+	public void pushEntity(int numberEntity, int sizeOfSegment, RepositoryConnection conn) throws RepositoryException {
+
+		int surplus = numberEntity%sizeOfSegment;
+		int loop = numberEntity/sizeOfSegment;
+		System.out.println("Adding entities to repository...");
+		for(int i=0; i<loop; i++) {
+			conn.add(createModelForEntity(sizeOfSegment));
+		}
+		conn.add(createModelForEntity(surplus));
+		System.out.println("Successful !");
+	}
+	
+	public void pushRelation(int numberRelation, int sizeOfSegment, RepositoryConnection conn) throws RepositoryException{
+		
+		int surplus = numberRelation%sizeOfSegment;
+		int loop = numberRelation/sizeOfSegment;
+		System.out.println("Adding relation to repository!!");
+		for(int i=0; i<loop; i++) {
+			conn.add(createModelForRelation(sizeOfSegment));
+		}
+		conn.add(createModelForRelation(surplus));
+		System.out.println("Successful !");
 	}
 }

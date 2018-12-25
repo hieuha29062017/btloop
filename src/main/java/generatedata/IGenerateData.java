@@ -1,7 +1,6 @@
 package generatedata;
 
-import entity.Entity;
-
-public interface IGenerateData {
-	public Entity generateData(int idNumber);
+public interface IGenerateData<T> {
+	
+	public T generateData(int idNumber);
 }
